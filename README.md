@@ -2,8 +2,10 @@
 Notification Scheduler Plugin allows scheduling of local notifications on the Android platform.
 
 ## ![](notification/addon_template/icon.png?raw=true) Prerequisites
-Follow instructions on the following page to create a custom Android build
-- [Create custom Android build](https://docs.godotengine.org/en/stable/tutorials/export/android_custom_build.html)
+Follow instructions on the following page to create a custom Android gradle build
+- [Create custom Android gradle build](https://docs.godotengine.org/en/stable/tutorials/export/android_gradle_build.html)
+
+- Create an `addons` directory in your project's root level.
 
 Upgrade your target Android SDK version to 33 via `Project->Export...->Android->Target SDK`
 
@@ -41,10 +43,14 @@ _Note: the notification icon resource should be of type `drawable`_
 
 ## ![](notification/addon_template/icon.png?raw=true) Usage
 Add a `NotificationScheduler` node to your scene and follow the following steps:
-- register listeners for the following signals emitted from the `NotificationScheduler` node
+- Register listeners for the following signals emitted from the `NotificationScheduler` node
     - `notification_opened` - when user taps notification item
     - `permission_granted`
 	- `permission_denied`
+- Initialize `NotificationScheduler` node before using any of its methods:
+```
+	$NotificationScheduler.init()
+```
 - At startup, using the `NotificationScheduler` node to check that the application has permissions to post notifications:
 ```
 	$NotificationScheduler.has_post_notifications_permission()
