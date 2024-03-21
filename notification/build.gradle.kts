@@ -10,9 +10,8 @@ val pluginName = "GodotAndroidNotificationSchedulerPlugin"
 val pluginPackageName = "org.godotengine.plugin.android.notification"
 val resultActivityClassPath = "$pluginPackageName.ResultActivity"
 val receiverClassPath = "$pluginPackageName.NotificationReceiver"
-val serviceClassPath = "$pluginPackageName.NotificationService"
 val godotVersion = "4.2.1"
-var pluginVersion = "1.0"
+var pluginVersion = "1.1"
 var demoAddOnsDirectory = "../demo/addons"
 var templateDirectory = "addon_template"
 
@@ -90,8 +89,7 @@ val copyAddonsToDemo by tasks.registering(Copy::class) {
             "pluginVersion" to pluginVersion,
             "pluginPackage" to pluginPackageName,
             "resultClass" to resultActivityClassPath,
-            "receiverClass" to receiverClassPath,
-            "serviceClass" to serviceClassPath))
+            "receiverClass" to receiverClassPath))
 }
 
 tasks.named<Delete>("clean").apply {

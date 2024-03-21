@@ -7,7 +7,6 @@ const PLUGIN_NAME: String = "@pluginName@"
 const PLUGIN_VERSION: String = "@pluginVersion@"
 const RESULT_ACTIVITY_CLASS_PATH: String = "@resultClass@"
 const RECEIVER_CLASS_PATH: String = "@receiverClass@"
-const SERVICE_CLASS_PATH: String = "@serviceClass@"
 
 var export_plugin: AndroidExportPlugin
 
@@ -63,8 +62,8 @@ class AndroidExportPlugin extends EditorExportPlugin:
 
 		__contents += "<receiver\n"
 		__contents += "\tandroid:name=\"%s\"\n" % RECEIVER_CLASS_PATH
-		__contents += "\tandroid:process=\":remote\" />\n\n"
-
-		__contents += "<service android:name=\"%s\" />\n" % SERVICE_CLASS_PATH
+		__contents += "\tandroid:enabled=\"true\"\n"
+		__contents += "\tandroid:exported=\"true\" />\n"
+		__contents += "\tandroid:process=\":godot_notification_receiver\" />\n\n"
 
 		return __contents
