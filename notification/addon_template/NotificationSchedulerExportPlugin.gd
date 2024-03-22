@@ -53,17 +53,21 @@ class AndroidExportPlugin extends EditorExportPlugin:
 	func _get_android_manifest_application_element_contents(platform: EditorExportPlatform, debug: bool) -> String:
 		var __contents: String = ""
 
-		__contents += "<activity\n"
-		__contents += "\tandroid:name=\"%s\"\n" % RESULT_ACTIVITY_CLASS_PATH
-		__contents += "\tandroid:theme=\"@style/Theme.AppCompat.NoActionBar\"\n"
-		__contents += "\tandroid:excludeFromRecents=\"true\"\n"
-		__contents += "\tandroid:launchMode=\"singleTask\"\n"
-		__contents += "\tandroid:taskAffinity=\"\" />\n\n"
+		__contents += """
+			<activity
+				android:name="%s"
+				android:theme="@style/Theme.AppCompat.NoActionBar"
+				android:excludeFromRecents="true"
+				android:launchMode="singleTask"
+				android:taskAffinity="" />
+			""" % RESULT_ACTIVITY_CLASS_PATH
 
-		__contents += "<receiver\n"
-		__contents += "\tandroid:name=\"%s\"\n" % RECEIVER_CLASS_PATH
-		__contents += "\tandroid:enabled=\"true\"\n"
-		__contents += "\tandroid:exported=\"true\" />\n"
-		__contents += "\tandroid:process=\":godot_notification_receiver\" />\n\n"
+		__contents += """
+			<receiver
+				android:name="%s"
+				android:enabled="true"
+				android:exported="true"
+				android:process=":godot_notification_receiver" />
+			""" % RECEIVER_CLASS_PATH
 
 		return __contents
