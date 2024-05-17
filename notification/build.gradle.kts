@@ -1,19 +1,26 @@
+//
+// © 2024-present https://github.com/cengiz-pz
+//
+
 import com.android.build.gradle.internal.tasks.factory.dependsOn
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android") version "1.9.0"
+    id("org.jetbrains.kotlin.android") version "1.9.23"
 }
 
-val pluginName = "GodotAndroidNotificationSchedulerPlugin"
+val pluginName = "NotificationSchedulerPlugin"
 val pluginPackageName = "org.godotengine.plugin.android.notification"
 val resultActivityClassPath = "$pluginPackageName.ResultActivity"
 val receiverClassPath = "$pluginPackageName.NotificationReceiver"
-val godotVersion = "4.2.1"
-var pluginVersion = "1.1"
-var demoAddOnsDirectory = "../demo/addons"
-var templateDirectory = "addon_template"
+val godotVersion = "4.2.2"
+val pluginVersion = "2.0"
+val demoAddOnsDirectory = "../demo/addons"
+val templateDirectory = "addon_template"
+val pluginDependencies = arrayOf(
+    "androidx.appcompat:appcompat:1.6.1"
+)
 
 android {
     namespace = pluginPackageName
@@ -44,7 +51,7 @@ android {
 
 dependencies {
     implementation("org.godotengine:godot:$godotVersion.stable")
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    pluginDependencies.forEach { implementation(it) }
 }
 
 val copyDebugAARToDemoAddons by tasks.registering(Copy::class) {
@@ -83,13 +90,30 @@ val copyAddonsToDemo by tasks.registering(Copy::class) {
     from(templateDirectory)
     into("$demoAddOnsDirectory/$pluginName")
     exclude("**/*.png")
+
+    var dependencyString = ""
+    for (i in pluginDependencies.indices) {
+        dependencyString += "\"${pluginDependencies[i]}\""
+        if (i < pluginDependencies.size-1) dependencyString += ", "
+    }
+
     filter(ReplaceTokens::class,
         "tokens" to mapOf(
             "pluginName" to pluginName,
             "pluginVersion" to pluginVersion,
             "pluginPackage" to pluginPackageName,
             "resultClass" to resultActivityClassPath,
-            "receiverClass" to receiverClassPath))
+            "receiverClass" to receiverClassPath,
+            "pluginDependencies" to dependencyString))
+}
+
+tasks.register<Zip>("packageDistribution") {
+    archiveFileName.set("${pluginName}-${pluginVersion}.zip")
+    destinationDirectory.set(layout.buildDirectory.dir("dist"))
+
+    from("../demo/addons/${pluginName}") {
+        into("${pluginName}-root/addons/${pluginName}")
+    }
 }
 
 tasks.named<Delete>("clean").apply {

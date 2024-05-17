@@ -1,3 +1,7 @@
+#
+# © 2024-present https://github.com/cengiz-pz
+#
+
 @tool
 extends EditorPlugin
 
@@ -7,6 +11,7 @@ const PLUGIN_NAME: String = "@pluginName@"
 const PLUGIN_VERSION: String = "@pluginVersion@"
 const RESULT_ACTIVITY_CLASS_PATH: String = "@resultClass@"
 const RECEIVER_CLASS_PATH: String = "@receiverClass@"
+const PLUGIN_DEPENDENCIES: Array = [ @pluginDependencies@ ]
 
 var export_plugin: AndroidExportPlugin
 
@@ -45,9 +50,7 @@ class AndroidExportPlugin extends EditorExportPlugin:
 
 
 	func _get_android_dependencies(platform: EditorExportPlatform, debug: bool) -> PackedStringArray:
-		return PackedStringArray([
-			"androidx.appcompat:appcompat:1.6.1"
-		])
+		return PackedStringArray(PLUGIN_DEPENDENCIES)
 
 
 	func _get_android_manifest_application_element_contents(platform: EditorExportPlatform, debug: bool) -> String:

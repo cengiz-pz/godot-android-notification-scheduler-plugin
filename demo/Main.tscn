@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Main.gd" id="1_r6ksj"]
 [ext_resource type="Texture2D" uid="uid://djckvdunsj6i1" path="res://notification-scheduler.png" id="2_7rmrj"]
-[ext_resource type="Script" path="res://addons/GodotAndroidNotificationSchedulerPlugin/NotificationScheduler.gd" id="3_guixi"]
+[ext_resource type="Script" path="res://addons/NotificationSchedulerPlugin/NotificationScheduler.gd" id="3_guixi"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_r6ksj")
@@ -44,7 +44,7 @@ theme_override_constants/separation = 5
 layout_mode = 2
 text = "Delay (s): "
 
-[node name="HSlider" type="HSlider" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="DelayHSlider" type="HSlider" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 1.0
@@ -55,7 +55,41 @@ rounded = true
 tick_count = 10
 ticks_on_borders = true
 
-[node name="Button" type="Button" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer"]
+[node name="ValueLabel" type="Label" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="IntervalHBoxContainer" type="HBoxContainer" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="IntervalCheckBox" type="CheckBox" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/IntervalHBoxContainer"]
+layout_mode = 2
+text = "Interval (s):"
+
+[node name="IntervalHSlider" type="HSlider" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/IntervalHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 1.0
+exp_edit = true
+rounded = true
+tick_count = 10
+
+[node name="ValueLabel" type="Label" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/IntervalHBoxContainer"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="RestartCheckBox" type="CheckBox" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Upon notification opened, restart app if running"
+
+[node name="PermissionButton" type="Button" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Request Notification Permission"
+
+[node name="SendButton" type="Button" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Send"
 
@@ -66,4 +100,10 @@ layout_mode = 2
 [node name="NotificationScheduler" type="Node" parent="."]
 script = ExtResource("3_guixi")
 
-[connection signal="pressed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="value_changed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer/DelayHSlider" to="." method="_on_delay_h_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/IntervalHBoxContainer/IntervalHSlider" to="." method="_on_interval_h_slider_value_changed"]
+[connection signal="pressed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/PermissionButton" to="." method="_on_permission_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/SendButton" to="." method="_on_button_pressed"]
+[connection signal="notification_opened" from="NotificationScheduler" to="." method="_on_notification_scheduler_notification_opened"]
+[connection signal="permission_denied" from="NotificationScheduler" to="." method="_on_notification_scheduler_permission_denied"]
+[connection signal="permission_granted" from="NotificationScheduler" to="." method="_on_notification_scheduler_permission_granted"]

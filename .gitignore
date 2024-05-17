@@ -20,7 +20,7 @@ out/
 # Gradle files
 .gradle/
 gradle/
-build/
+notification/build/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -88,9 +88,12 @@ lint/tmp/
 # Godot
 .godot/
 *.import
-demo/addons
-!demo/icon.svg.import
-!**/addon_template/icon.png.import
+demo/addons/
+demo/android/build/*
+!demo/android/build/res
+demo/android/build/res/*
+!demo/android/build/res/drawable-*
+demo/**/splash*.png
 
 # Mac OS
 .DS_Store

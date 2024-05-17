@@ -1,12 +1,8 @@
-package org.godotengine.plugin.android.notification;
+//
+// © 2024-present https://github.com/cengiz-pz
+//
 
-import static org.godotengine.plugin.android.notification.NotificationConstants.CHANNEL_ID_LABEL;
-import static org.godotengine.plugin.android.notification.NotificationConstants.ICON_RESOURCE_TYPE;
-import static org.godotengine.plugin.android.notification.NotificationConstants.NOTIFICATION_CONTENT_LABEL;
-import static org.godotengine.plugin.android.notification.NotificationConstants.NOTIFICATION_ID_LABEL;
-import static org.godotengine.plugin.android.notification.NotificationConstants.NOTIFICATION_SMALL_ICON_NAME;
-import static org.godotengine.plugin.android.notification.NotificationConstants.NOTIFICATION_TITLE_LABEL;
-import static org.godotengine.plugin.android.notification.NotificationConstants.NOTIFICATION_URI_LABEL;
+package org.godotengine.plugin.android.notification;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -17,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
@@ -25,70 +20,79 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import org.godotengine.plugin.android.notification.model.NotificationData;
+
 
 public class NotificationReceiver extends BroadcastReceiver {
-    private static final String LOG_TAG = "godot::" + NotificationReceiver.class.getSimpleName();
+	private static final String LOG_TAG = "godot::" + NotificationReceiver.class.getSimpleName();
 
-    public NotificationReceiver() {
-    }
+	private static final String ICON_RESOURCE_TYPE = "drawable";
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        if (intent == null) {
-            Log.e(LOG_TAG, String.format("%s():: Received intent is null. Unable to generate notification.",
-                    "notify"));
-        } else if (intent.hasExtra(NOTIFICATION_ID_LABEL)) {
-            int notificationId = intent.getIntExtra(NOTIFICATION_ID_LABEL, 0);
-            String channelId = intent.getStringExtra(CHANNEL_ID_LABEL);
-            String title = intent.getStringExtra(NOTIFICATION_TITLE_LABEL);
-            String content = intent.getStringExtra(NOTIFICATION_CONTENT_LABEL);
-            String smallIconName = intent.getStringExtra(NOTIFICATION_SMALL_ICON_NAME);
+	public NotificationReceiver() {
+	}
 
-            Intent notificationActionIntent = new Intent(context, ResultActivity.class);
-            notificationActionIntent.putExtra(NOTIFICATION_ID_LABEL, notificationId);
-            notificationActionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		if (intent == null) {
+			Log.e(LOG_TAG, String.format("%s():: Received intent is null. Unable to generate notification.",
+					"onReceive"));
+		} else if (intent.hasExtra(NotificationData.DATA_KEY_ID)) {
+			int notificationId = intent.getIntExtra(NotificationData.DATA_KEY_ID, 0);
+			String channelId = intent.getStringExtra(NotificationData.DATA_KEY_CHANNEL_ID);
+			String title = intent.getStringExtra(NotificationData.DATA_KEY_TITLE);
+			String content = intent.getStringExtra(NotificationData.DATA_KEY_CONTENT);
+			String smallIconName = intent.getStringExtra(NotificationData.DATA_KEY_SMALL_ICON_NAME);
 
-            if (intent.hasExtra(NOTIFICATION_URI_LABEL)) {
-                notificationActionIntent.setData(Uri.parse(intent.getStringExtra(NOTIFICATION_URI_LABEL)));
-            }
+			Intent notificationActionIntent = new Intent(context, ResultActivity.class);
+			notificationActionIntent.putExtra(NotificationData.DATA_KEY_ID, notificationId);
 
-            Log.i(LOG_TAG, String.format("%s():: received notification id:'%d' - channel id:%s - title:'%s' - content:'%s' - small icon name:'%s",
-                    "notify", notificationId, channelId, title, content, smallIconName));
+			if (intent.hasExtra(NotificationData.DATA_KEY_DEEPLINK)) {
+				notificationActionIntent.putExtra(NotificationData.DATA_KEY_DEEPLINK, intent.getStringExtra(NotificationData.DATA_KEY_DEEPLINK));
+			}
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationActionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+			if (intent.hasExtra(NotificationData.OPTION_KEY_RESTART_APP)) {
+				notificationActionIntent.putExtra(NotificationData.OPTION_KEY_RESTART_APP, true);
+			}
 
-                Resources resources = context.getResources();
-                @SuppressLint("DiscouragedApi") NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelId)
-                        .setSmallIcon(resources.getIdentifier(smallIconName, ICON_RESOURCE_TYPE, context.getPackageName()))
-                        /* TODO: large icon not working.  It needs to be tested again in future versions.
-                        .setLargeIcon(BitmapFactory.decodeResource(r, r.getIdentifier(LARGE_ICON_LABEL, LARGE_ICON_RESOURCE_TYPE, context.getPackageName())))
-                        .setStyle(new NotificationCompat.BigPictureStyle()
-                                .bigPicture(BitmapFactory.decodeResource(r, r.getIdentifier(LARGE_ICON_LABEL, LARGE_ICON_RESOURCE_TYPE, context.getPackageName())))
-                                .bigLargeIcon(BitmapFactory.decodeResource(r, r.getIdentifier(LARGE_ICON_LABEL, LARGE_ICON_RESOURCE_TYPE, context.getPackageName()))))
-                         */
-                        .setContentTitle(title)
-                        .setContentText(content)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                        .setContentIntent(pendingIntent)
-                        .setAutoCancel(true);
+			notificationActionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-                        ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-                    Notification notification = notificationBuilder.build();
-                    NotificationManagerCompat.from(context).notify(notificationId, notification);
-                } else {
-                    Log.w(LOG_TAG, String.format("%s():: unable to process notification as %s permission is not granted",
-                            "notify", Manifest.permission.POST_NOTIFICATIONS));
-                }
-            } else {
-                Log.w(LOG_TAG, String.format("%s():: unable to process notification as current SDK is %d and required SDK is %d",
-                        "notify", Build.VERSION.SDK_INT, Build.VERSION_CODES.M));
-            }
-        } else {
-            Log.e(LOG_TAG, String.format("%s():: %s extra not found in intent. Unable to generate notification.",
-                    "notify", NOTIFICATION_ID_LABEL));
-        }
-    }
+			Log.i(LOG_TAG, String.format("%s():: received notification id:'%d' - channel id:%s - title:'%s' - content:'%s' - small icon name:'%s",
+					"onReceive", notificationId, channelId, title, content, smallIconName));
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+				PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationActionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+				Resources resources = context.getResources();
+				@SuppressLint("DiscouragedApi") NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelId)
+						.setSmallIcon(resources.getIdentifier(smallIconName, ICON_RESOURCE_TYPE, context.getPackageName()))
+						/* TODO: large icon not working. It needs to be tested again in future versions.
+						.setLargeIcon(BitmapFactory.decodeResource(r, r.getIdentifier(LARGE_ICON_LABEL, LARGE_ICON_RESOURCE_TYPE, context.getPackageName())))
+						.setStyle(new NotificationCompat.BigPictureStyle()
+								.bigPicture(BitmapFactory.decodeResource(r, r.getIdentifier(LARGE_ICON_LABEL, LARGE_ICON_RESOURCE_TYPE, context.getPackageName())))
+								.bigLargeIcon(BitmapFactory.decodeResource(r, r.getIdentifier(LARGE_ICON_LABEL, LARGE_ICON_RESOURCE_TYPE, context.getPackageName()))))
+						 */
+						.setContentTitle(title)
+						.setContentText(content)
+						.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+						.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+						.setContentIntent(pendingIntent)
+						.setAutoCancel(true);
+
+				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+						ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+					Notification notification = notificationBuilder.build();
+					NotificationManagerCompat.from(context).notify(notificationId, notification);
+				} else {
+					Log.w(LOG_TAG, String.format("%s():: unable to process notification as %s permission is not granted",
+							"onReceive", Manifest.permission.POST_NOTIFICATIONS));
+				}
+			} else {
+				Log.w(LOG_TAG, String.format("%s():: unable to process notification as current SDK is %d and required SDK is %d",
+						"onReceive", Build.VERSION.SDK_INT, Build.VERSION_CODES.M));
+			}
+		} else {
+			Log.e(LOG_TAG, String.format("%s():: %s extra not found in intent. Unable to generate notification.",
+					"onReceive", NotificationData.DATA_KEY_ID));
+		}
+	}
 }

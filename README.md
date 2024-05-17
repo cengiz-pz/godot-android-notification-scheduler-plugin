@@ -1,13 +1,13 @@
+
+---
 # ![](notification/addon_template/icon.png?raw=true) Notification Scheduler Plugin
 Notification Scheduler Plugin allows scheduling of local notifications on the Android platform.
+
+_For iOS version, visit https://github.com/cengiz-pz/godot-ios-notification-scheduler-plugin ._
 
 ## ![](notification/addon_template/icon.png?raw=true) Prerequisites
 Follow instructions on the following page to create a custom Android gradle build
 - [Create custom Android gradle build](https://docs.godotengine.org/en/stable/tutorials/export/android_gradle_build.html)
-
-- Create an `addons` directory in your project's root level.
-
-Upgrade your target Android SDK version to 33 via `Project->Export...->Android->Target SDK`
 
 Prior to using this plugin, a notification icon should be generated. For instructions please visit the following link:
 - https://developer.android.com/studio/write/create-app-icons#notification
@@ -22,16 +22,16 @@ Steps:
 - search for and select the `Android Notification Scheduler` plugin in Godot Editor
 - click `Download` button
 - on the installation dialog...
-  - click `Change Install Folder` button and select your project's `addons` directory
-  - uncheck `Ignore asset root` checkbox
-  - click `Install` button
+	- keep `Change Install Folder` setting pointing to your project's root directory
+	- keep `Ignore asset root` checkbox checked
+	- click `Install` button
 - enable the plugin via the `Plugins` tab of `Project->Project Settings...` menu, in the Godot Editor
 
 ### ![](notification/addon_template/icon.png?raw=true) Installing manually
 Steps:
 - download release archive from Github
 - unzip the release archive
-- copy to your Godot project's `addons` directory
+- copy to your Godot project's root directory
 - enable the plugin via the `Plugins` tab of `Project->Project Settings...` menu, in the Godot Editor
 
 ## ![](notification/addon_template/icon.png?raw=true) Notification icon
@@ -44,13 +44,9 @@ _Note: the notification icon resource should be of type `drawable`_
 ## ![](notification/addon_template/icon.png?raw=true) Usage
 Add a `NotificationScheduler` node to your scene and follow the following steps:
 - Register listeners for the following signals emitted from the `NotificationScheduler` node
-    - `notification_opened` - when user taps notification item
-    - `permission_granted`
+	- `notification_opened` - when user taps notification item
+	- `permission_granted`
 	- `permission_denied`
-- Initialize `NotificationScheduler` node before using any of its methods:
-```
-	$NotificationScheduler.init()
-```
 - At startup, using the `NotificationScheduler` node to check that the application has permissions to post notifications:
 ```
 	$NotificationScheduler.has_post_notifications_permission()
@@ -72,23 +68,30 @@ Add a `NotificationScheduler` node to your scene and follow the following steps:
 			set_channel_id("my_channel_id").\
 			set_title("My Notification Title").\
 			set_content("My notification content").\
-			set_small_icon_name("ic_name_of_the_icon_that_you_generated")
+			set_small_icon_name("ic_name_of_the_icon_that_you_generated").\
+			set_delay(my_delay_in_seconds)
 ```
 - Schedule notification using the `NotificationScheduler` node:
 ```
 	$NotificationScheduler.schedule(
-			my_notification_data,
-			my_delay_in_seconds
+			my_notification_data
 		)
 ```
+- _`NotificationData`'s `set_interval(interval_in_seconds)` method can be used for scheduling repeating notifications._
+- _`NotificationData`'s `set_deeplink(data)` method can be used for delivering URI data along with the notification._
+	- _The [Deeplink Plugin](https://github.com/cengiz-pz/godot-android-deeplink-plugin) can then be used to process the URI data._
 
 ### ![](notification/addon_template/icon.png?raw=true) Other Available Methods
-- `schedule_repeating(notification_data, delay, interval)`
-- `schedule_with_deeplink(notification_data, delay)`
-    - use `NotificationData`'s `set_deeplink()` method to set the deeplink value
-- `schedule_repeating_with_deeplink(notification_data, delay, interval)`
-    - use `NotificationData`'s `set_deeplink()` method to set the deeplink value
 - `cancel(notification_id)`
+- `get_notification_id()` - alternative way to get the ID of the last opened notification.
+
+### ![](notification/addon_template/icon.png?raw=true) Demo
+- Restore the following notification icons after `Android Build Template` is installed for the demo app.
+	- `demo/android/build/res/drawable-anydpi-v24/ic_demo_notification.xml`
+	- `demo/android/build/res/drawable-hdpi/ic_demo_notification.png`
+	- `demo/android/build/res/drawable-mdpi/ic_demo_notification.png`
+	- `demo/android/build/res/drawable-xhdpi/ic_demo_notification.png`
+	- `demo/android/build/res/drawable-xxhdpi/ic_demo_notification.png`
 
 ## ![](notification/addon_template/icon.png?raw=true) Troubleshooting
 `adb logcat` is one of the best tools for troubleshooting unexpected behavior
@@ -100,3 +103,10 @@ Add a `NotificationScheduler` node to your scene and follow the following steps:
 
 Also check out:
 https://docs.godotengine.org/en/stable/tutorials/platform/android/android_plugin.html#troubleshooting
+<br/><br/><br/>
+
+---
+# ![](notification/addon_template/icon.png?raw=true) Credits
+Developed by [Cengiz](https://github.com/cengiz-pz)
+
+Original repository: [Godot Android Notification Scheduler Plugin](https://github.com/cengiz-pz/godot-android-notification-scheduler-plugin)
