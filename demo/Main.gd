@@ -5,8 +5,16 @@
 extends Node
 
 const NOTIFICATION_ICON_NAME: String = "ic_demo_notification"
-const NOTIFICATION_CHANNEL_ID: String = "my_channel_id"
-const NOTIFICATION_CHANNEL_NAME: String = "My Demo Channel"
+
+@export_category("Notification Channel")
+@export var channel_id: String = "my_channel_id"
+@export var channel_name: String = "My Demo Channel"
+@export var channel_description: String = "My Channel Description"
+@export var channel_importance: NotificationChannel.Importance = NotificationChannel.Importance.DEFAULT
+
+@export_category("Notification Content")
+@export var notification_title: String = "Godot Notification Scheduler Demo"
+@export var notification_text: String = "This is a demo notification. Have you received it?"
 
 @onready var notification_scheduler: NotificationScheduler = $NotificationScheduler as NotificationScheduler
 @onready var _label: RichTextLabel = $CanvasLayer/CenterContainer/VBoxContainer/RichTextLabel as RichTextLabel
@@ -18,6 +26,9 @@ const NOTIFICATION_CHANNEL_NAME: String = "My Demo Channel"
 @onready var _permission_button: Button = $CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/PermissionButton as Button
 @onready var _restart_checkbox: CheckBox = $CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/RestartCheckBox as CheckBox
 
+var _notification_id: int = 0
+
+
 func _ready() -> void:
 	_delay_value_label.text = str(int(_delay_slider.value))
 	_interval_value_label.text = str(int(_interval_slider.value))
@@ -25,9 +36,10 @@ func _ready() -> void:
 	if notification_scheduler.has_post_notifications_permission():
 		notification_scheduler.create_notification_channel(
 			NotificationChannel.new()
-					.set_id(NOTIFICATION_CHANNEL_ID)
-					.set_name(NOTIFICATION_CHANNEL_NAME)
-					.set_description("Description"))
+					.set_id(channel_id)
+					.set_name(channel_name)
+					.set_description(channel_description)
+					.set_importance(channel_importance))
 	else:
 		_permission_button.disabled = false
 		_print_to_screen("App does not have required notification permissions!")
@@ -36,10 +48,10 @@ func _ready() -> void:
 
 func _on_button_pressed() -> void:
 	var __notification_data = NotificationData.new()\
-			.set_id(1)\
-			.set_channel_id(NOTIFICATION_CHANNEL_ID)\
-			.set_title("Godot Notification Scheduler Demo")\
-			.set_content("This is a demo notification. Have you received it?")\
+			.set_id(_get_next_notification_id())\
+			.set_channel_id(channel_id)\
+			.set_title(notification_title)\
+			.set_content(notification_text)\
 			.set_small_icon_name(NOTIFICATION_ICON_NAME)\
 			.set_delay(_delay_slider.value)
 
@@ -52,6 +64,11 @@ func _on_button_pressed() -> void:
 	_print_to_screen("Scheduling notification with a delay of %d seconds" % int(_delay_slider.value))
 
 	notification_scheduler.schedule(__notification_data)
+
+
+func _get_next_notification_id() -> int:
+	_notification_id += 1
+	return _notification_id
 
 
 func _print_to_screen(a_message: String, a_is_error: bool = false) -> void:
@@ -80,9 +97,10 @@ func _on_notification_scheduler_permission_granted(permission_name: String) -> v
 
 	notification_scheduler.create_notification_channel(
 		NotificationChannel.new()
-				.set_id(NOTIFICATION_CHANNEL_ID)
-				.set_name(NOTIFICATION_CHANNEL_NAME)
-				.set_description("Channel description"))
+				.set_id(channel_id)
+				.set_name(channel_name)
+				.set_description(channel_description)
+				.set_importance(channel_importance))
 
 
 func _on_notification_scheduler_permission_denied(permission_name: String) -> void:

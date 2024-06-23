@@ -60,10 +60,11 @@ Add a `NotificationScheduler` node to your scene and follow the following steps:
 - Create a notification channel using the `NotificationScheduler` node:
 ```
 	$NotificationScheduler.create_notification_channel(
-			NotificationChannel.new()
-					.set_id("my_channel_id")
-					.set_name("My Channel Name")
-					.set_description("My channel description"))
+		NotificationChannel.new()
+			.set_id("my_channel_id")
+			.set_name("My Channel Name")
+			.set_description("My channel description")
+			.set_importance(NotificationChannel.Importance.DEFAULT))
 ```
 - Build `NotificationData` object:
 ```
