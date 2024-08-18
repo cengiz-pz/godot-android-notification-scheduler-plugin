@@ -7,24 +7,24 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android") version "1.9.23"
+    id("org.jetbrains.kotlin.android") version "2.0.10"
 }
 
 val pluginName = "NotificationSchedulerPlugin"
 val pluginPackageName = "org.godotengine.plugin.android.notification"
 val resultActivityClassPath = "$pluginPackageName.ResultActivity"
 val receiverClassPath = "$pluginPackageName.NotificationReceiver"
-val godotVersion = "4.2.2"
-val pluginVersion = "2.1"
+val godotVersion = "4.3.0"
+val pluginVersion = "3.0"
 val demoAddOnsDirectory = "../demo/addons"
 val templateDirectory = "addon_template"
 val pluginDependencies = arrayOf(
-    "androidx.appcompat:appcompat:1.6.1"
+    "androidx.appcompat:appcompat:1.7.0"
 )
 
 android {
     namespace = pluginPackageName
-    compileSdk = 33
+    compileSdk = 34
 
     buildFeatures {
         buildConfig = true

@@ -100,20 +100,6 @@ Add a `NotificationScheduler` node to your scene and follow the following steps:
 
 ## ![](notification/addon_template/icon.png?raw=true) Troubleshooting
 
-### Plugin icon
-If you're getting the following error or any error related to the plugin's `icon.png` file:
-
-```
-Godot Engine v4.?.stable.official (c) 2007-present Juan Linietsky, Ariel Manzur & Godot Contributors.
---- Debug adapter server started ---
---- GDScript language server started on port ? ---
-  res://addons/[?]Plugin/[?]ExportPlugin.gd:21 - Parse Error: Preload file "res://addons/[?]Plugin/icon.png" has no resource loaders (unrecognized file extension).
-  res://addons/[?]Plugin/[?]ExportPlugin.gd:70 - Parse Error: Could not find type "[?]" in the current scope.
-  ...
-```
-
-then reimport the `res://addons/[?]Plugin/icon.png` file from Godot Editor's context menu.
-
 ### ADB logcat
 `adb logcat` is one of the best tools for troubleshooting unexpected behavior
 - use `$> adb logcat | grep 'godot'` on Linux
@@ -132,3 +118,16 @@ https://docs.godotengine.org/en/stable/tutorials/platform/android/android_plugin
 Developed by [Cengiz](https://github.com/cengiz-pz)
 
 Original repository: [Godot Android Notification Scheduler Plugin](https://github.com/cengiz-pz/godot-android-notification-scheduler-plugin)
+
+<br/><br/><br/>
+
+---
+# ![](notification/addon_template/icon.png?raw=true) All Plugins
+
+| Plugin | Android | iOS |
+| :---: | :--- | :--- |
+| Notification Scheduler | https://github.com/cengiz-pz/godot-android-notification-scheduler-plugin | https://github.com/cengiz-pz/godot-ios-notification-scheduler-plugin |
+| Admob | https://github.com/cengiz-pz/godot-android-admob-plugin | https://github.com/cengiz-pz/godot-ios-admob-plugin |
+| Deeplink | https://github.com/cengiz-pz/godot-android-deeplink-plugin | https://github.com/cengiz-pz/godot-ios-deeplink-plugin |
+| Share | https://github.com/cengiz-pz/godot-android-share-plugin | https://github.com/cengiz-pz/godot-ios-share-plugin |
+| In-App Review | https://github.com/cengiz-pz/godot-android-inapp-review-plugin | https://github.com/cengiz-pz/godot-ios-inapp-review-plugin |
