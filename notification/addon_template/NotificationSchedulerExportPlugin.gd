@@ -10,7 +10,8 @@ const PLUGIN_PARENT_NODE_TYPE = "Node"
 const PLUGIN_NAME: String = "@pluginName@"
 const PLUGIN_VERSION: String = "@pluginVersion@"
 const RESULT_ACTIVITY_CLASS_PATH: String = "@resultClass@"
-const RECEIVER_CLASS_PATH: String = "@receiverClass@"
+const NOTIFICATION_RECEIVER_CLASS_PATH: String = "@notificationReceiverClass@"
+const CANCEL_RECEIVER_CLASS_PATH: String = "@cancelReceiverClass@"
 const PLUGIN_DEPENDENCIES: Array = [ @pluginDependencies@ ]
 
 var export_plugin: AndroidExportPlugin
@@ -71,6 +72,13 @@ class AndroidExportPlugin extends EditorExportPlugin:
 				android:enabled="true"
 				android:exported="true"
 				android:process=":godot_notification_receiver" />
-			""" % RECEIVER_CLASS_PATH
+			""" % NOTIFICATION_RECEIVER_CLASS_PATH
+
+		__contents += """
+			<receiver
+				android:name="%s"
+				android:enabled="true"
+				android:exported="true" />
+			""" % CANCEL_RECEIVER_CLASS_PATH
 
 		return __contents

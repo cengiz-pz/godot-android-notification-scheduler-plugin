@@ -109,3 +109,7 @@ func _on_notification_scheduler_permission_denied(permission_name: String) -> vo
 
 func _on_notification_scheduler_notification_opened(notification_id: int) -> void:
 	_print_to_screen("Notification %d opened" % notification_id)
+
+
+func _on_notification_scheduler_notification_dismissed(notification_id: int) -> void:
+	_print_to_screen("Notification %d dismissed" % notification_id)

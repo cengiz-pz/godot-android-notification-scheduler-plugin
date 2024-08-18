@@ -104,6 +104,7 @@ script = ExtResource("3_guixi")
 [connection signal="value_changed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/IntervalHBoxContainer/IntervalHSlider" to="." method="_on_interval_h_slider_value_changed"]
 [connection signal="pressed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/PermissionButton" to="." method="_on_permission_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/SendButton" to="." method="_on_button_pressed"]
+[connection signal="notification_dismissed" from="NotificationScheduler" to="." method="_on_notification_scheduler_notification_dismissed"]
 [connection signal="notification_opened" from="NotificationScheduler" to="." method="_on_notification_scheduler_notification_opened"]
 [connection signal="permission_denied" from="NotificationScheduler" to="." method="_on_notification_scheduler_permission_denied"]
 [connection signal="permission_granted" from="NotificationScheduler" to="." method="_on_notification_scheduler_permission_granted"]

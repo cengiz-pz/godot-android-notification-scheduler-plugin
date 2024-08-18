@@ -43,9 +43,10 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 
 	static NotificationSchedulerPlugin instance;
 
-	private static final String PERMISSION_GRANTED_SIGNAL_NAME = "permission_granted";
-	private static final String PERMISSION_DENIED_SIGNAL_NAME = "permission_denied";
-	private static final String NOTIFICATION_OPENED_SIGNAL_NAME = "notification_opened";
+	private static final SignalInfo PERMISSION_GRANTED_SIGNAL = new SignalInfo("permission_granted", String.class);
+	private static final SignalInfo PERMISSION_DENIED_SIGNAL = new SignalInfo("permission_denied", String.class);
+	private static final SignalInfo NOTIFICATION_OPENED_SIGNAL = new SignalInfo("notification_opened", Integer.class);
+	private static final SignalInfo NOTIFICATION_DISMISSED_SIGNAL = new SignalInfo("notification_dismissed", Integer.class);
 
 	private static final int POST_NOTIFICATIONS_PERMISSION_REQUEST_CODE = 11803;
 
@@ -193,9 +194,10 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 	@Override
 	public Set<SignalInfo> getPluginSignals() {
 		Set<SignalInfo> signals = new ArraySet<>();
-		signals.add(new SignalInfo(NOTIFICATION_OPENED_SIGNAL_NAME, Integer.class));
-		signals.add(new SignalInfo(PERMISSION_GRANTED_SIGNAL_NAME, String.class));
-		signals.add(new SignalInfo(PERMISSION_DENIED_SIGNAL_NAME, String.class));
+		signals.add(NOTIFICATION_OPENED_SIGNAL);
+		signals.add(NOTIFICATION_DISMISSED_SIGNAL);
+		signals.add(PERMISSION_GRANTED_SIGNAL);
+		signals.add(PERMISSION_DENIED_SIGNAL);
 		return signals;
 	}
 
@@ -237,10 +239,10 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 				// If request is cancelled, the result arrays are empty.
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					Log.d(LOG_TAG, "onMainRequestPermissionsResult():: permission request granted");
-					emitSignal(PERMISSION_GRANTED_SIGNAL_NAME, Manifest.permission.POST_NOTIFICATIONS);
+					emitSignal(getGodot(), getPluginName(), PERMISSION_GRANTED_SIGNAL, Manifest.permission.POST_NOTIFICATIONS);
 				} else {
 					Log.d(LOG_TAG, "onMainRequestPermissionsResult():: permission request denied");
-					emitSignal(PERMISSION_DENIED_SIGNAL_NAME, Manifest.permission.POST_NOTIFICATIONS);
+					emitSignal(getGodot(), getPluginName(), PERMISSION_DENIED_SIGNAL, Manifest.permission.POST_NOTIFICATIONS);
 				}
 			}
 		} else {
@@ -249,7 +251,11 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 	}
 
 	void handleNotificationOpened(int notificationId) {
-		emitSignal(NOTIFICATION_OPENED_SIGNAL_NAME, notificationId);
+		emitSignal(getGodot(), getPluginName(), NOTIFICATION_OPENED_SIGNAL, notificationId);
+	}
+
+	void handleNotificationDismissed(int notificationId) {
+		emitSignal(getGodot(), getPluginName(), NOTIFICATION_DISMISSED_SIGNAL, notificationId);
 	}
 
 	@RequiresApi(api = Build.VERSION_CODES.N)

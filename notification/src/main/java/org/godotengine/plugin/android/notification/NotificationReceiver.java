@@ -56,6 +56,10 @@ public class NotificationReceiver extends BroadcastReceiver {
 
 			notificationActionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
+			Intent onCancelIntent = new Intent(context, CancelNotificationReceiver.class);
+			onCancelIntent.putExtra(NotificationData.DATA_KEY_ID, notificationId);
+			PendingIntent onDismissPendingIntent = PendingIntent.getBroadcast(context, 0, onCancelIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
 			Log.i(LOG_TAG, String.format("%s():: received notification id:'%d' - channel id:%s - title:'%s' - content:'%s' - small icon name:'%s",
 					"onReceive", notificationId, channelId, title, content, smallIconName));
 
@@ -76,6 +80,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 						.setPriority(NotificationCompat.PRIORITY_DEFAULT)
 						.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 						.setContentIntent(pendingIntent)
+						.setDeleteIntent(onDismissPendingIntent)
 						.setAutoCancel(true);
 
 				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||

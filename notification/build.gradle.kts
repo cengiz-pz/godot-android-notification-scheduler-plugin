@@ -13,7 +13,8 @@ plugins {
 val pluginName = "NotificationSchedulerPlugin"
 val pluginPackageName = "org.godotengine.plugin.android.notification"
 val resultActivityClassPath = "$pluginPackageName.ResultActivity"
-val receiverClassPath = "$pluginPackageName.NotificationReceiver"
+val notificationReceiverClassPath = "$pluginPackageName.NotificationReceiver"
+val cancelReceiverClassPath = "$pluginPackageName.CancelNotificationReceiver"
 val godotVersion = "4.3.0"
 val pluginVersion = "3.0"
 val demoAddOnsDirectory = "../demo/addons"
@@ -103,7 +104,8 @@ val copyAddonsToDemo by tasks.registering(Copy::class) {
             "pluginVersion" to pluginVersion,
             "pluginPackage" to pluginPackageName,
             "resultClass" to resultActivityClassPath,
-            "receiverClass" to receiverClassPath,
+            "notificationReceiverClass" to notificationReceiverClassPath,
+            "cancelReceiverClass" to cancelReceiverClassPath,
             "pluginDependencies" to dependencyString))
 }
 

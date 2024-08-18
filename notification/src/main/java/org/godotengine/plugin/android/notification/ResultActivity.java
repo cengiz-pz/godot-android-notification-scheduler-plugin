@@ -4,12 +4,12 @@
 
 package org.godotengine.plugin.android.notification;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.godotengine.plugin.android.notification.model.NotificationData;
 
