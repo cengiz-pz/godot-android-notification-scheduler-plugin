@@ -63,6 +63,7 @@ class AndroidExportPlugin extends EditorExportPlugin:
 				android:theme="@style/Theme.AppCompat.NoActionBar"
 				android:excludeFromRecents="true"
 				android:launchMode="singleTask"
+				android:noHistory="true"
 				android:taskAffinity="" />
 			""" % RESULT_ACTIVITY_CLASS_PATH
 

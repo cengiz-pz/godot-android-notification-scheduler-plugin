@@ -54,7 +54,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 				notificationActionIntent.putExtra(NotificationData.OPTION_KEY_RESTART_APP, true);
 			}
 
-			notificationActionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			notificationActionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
 
 			Intent onCancelIntent = new Intent(context, CancelNotificationReceiver.class);
 			onCancelIntent.putExtra(NotificationData.DATA_KEY_ID, notificationId);
