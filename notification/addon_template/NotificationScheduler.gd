@@ -83,6 +83,11 @@ func request_post_notifications_permission() -> void:
 	else:
 		printerr("%s singleton not initialized!" % PLUGIN_SINGLETON_NAME)
 
+func open_app_info_settings() -> void:
+	if _plugin_singleton:
+		_plugin_singleton.open_app_info_settings()
+	else:
+		printerr("%s singleton not initialized!" % PLUGIN_SINGLETON_NAME)
 
 func _on_notification_opened(a_notification_id: int) -> void:
 	notification_opened.emit(a_notification_id)
