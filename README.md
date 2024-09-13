@@ -35,11 +35,34 @@ Steps:
 - enable the plugin via the `Plugins` tab of `Project->Project Settings...` menu, in the Godot Editor
 
 ## ![](notification/addon_template/icon.png?raw=true) Notification icon
-Copy your notification icon to your project's `android/build/res` directory.
+Copy your notification icon to your Godot project's `android/build/res` directory.
 
 Alternatively, you could use `Android Studio`'s `Image Asset Studio` to generate your icon set.
 
 _Note: the notification icon resource should be of type `drawable`_
+
+### ![](notification/addon_template/icon.png?raw=true) Generating notification icons using Android Studio
+
+Steps:
+
+- Open your Godot project's `android/build` directory in Android Studio
+- Wait for it to fully load
+- Right click on `res` folder and select `New -> Image Asset` from the context menu
+- On the `Asset Studio` wizard
+	- Set `Icon type` to `Notification Icons`
+	- Enter a the name of your notification icon (ie. `ic_my_notification`)
+	- Configure your icon
+	- Click `Next` button
+	- Click `Finish` button to confirm
+- The following new directories should have been created under your Godot project's `android/build/res` directory:
+	- `drawable-anydpi`
+	- `drawable-xxhdpi`
+	- `drawable-xhdpi`
+	- `drawable-hdpi`
+	- `drawable-mdpi`
+- Make sure you use the name you specified for your icons when initializing notifications:
+	- `my_notification_data.set_small_icon_name("<your_notification_icon_name_here>")`
+
 
 ## ![](notification/addon_template/icon.png?raw=true) Usage
 Add a `NotificationScheduler` node to your scene and follow the following steps:
