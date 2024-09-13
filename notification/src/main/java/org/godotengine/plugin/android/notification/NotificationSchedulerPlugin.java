@@ -20,6 +20,8 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
+import android.provider.Settings;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -181,6 +183,24 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 			}
 		} catch (Exception e) {
 			Log.e(LOG_TAG, "request_post_notifications_permission():: Failed to request permission due to " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Opens APP INFO settings screen
+	 */
+	@UsedByGodot
+	public void open_app_info_settings() {
+		Log.d(LOG_TAG, "open_app_info_settings()");
+		
+		try {
+			Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
+			intent.setData(uri);
+			activity.startActivity(intent);
+		} catch (Exception e) {
+			Log.e(LOG_TAG, "open_app_info_settings():: Failed due to "+ e.getMessage());
 		}
 	}
 

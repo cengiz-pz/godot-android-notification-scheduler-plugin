@@ -79,7 +79,11 @@ Add a `NotificationScheduler` node to your scene and follow the following steps:
 	$NotificationScheduler.request_post_notifications_permission()
 ```
 - `permission_granted` signal will be emitted when the application receives the permissions
-
+> On Android, apps that target Android 13 or higher can ask for notification permission as many times as they want until the user explicitly denies the permission twice. If the user targets Android 12 or lower, the app can ask for permission as many times as it wants until the user denies the permission once. If the user denies the permission twice, the app can't ask again unless the user reinstalls the app
+- After user has denied the request, you can ask to turn on notification permission manually and send them to App_Info screen using the `NotificationScheduler` node:(Best Practice: Don't promt users automatically, insted keep a button in settings to toggle notifications)
+```
+	$NotificationScheduler.open_app_info_settings()
+```
 - Create a notification channel using the `NotificationScheduler` node:
 ```
 	$NotificationScheduler.create_notification_channel(
