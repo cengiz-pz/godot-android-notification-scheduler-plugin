@@ -1,0 +1,4 @@
+[submodule "addon"]
+	path = notification/addon_template
+	url = https://github.com/cengiz-pz/godot-notification-scheduler-addon.git
+	branch = main
