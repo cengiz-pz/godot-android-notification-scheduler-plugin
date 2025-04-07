@@ -71,7 +71,7 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 	@UsedByGodot
 	public void create_notification_channel(Dictionary data) {
 		ChannelData channelData = new ChannelData(data);
-		if (channelData.isValid()) {
+		if (channelData.validate()) {
 			NotificationChannel channel = new NotificationChannel(channelData.getId(), channelData.getName(),
 					channelData.getImportance());
 			channel.setDescription(channelData.getDescription());

@@ -4,6 +4,11 @@
 
 package org.godotengine.plugin.android.notification.model;
 
+import android.app.NotificationManager;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import org.godotengine.godot.Dictionary;
 
 public class ChannelData {
@@ -35,11 +40,15 @@ public class ChannelData {
 		return (int) data.get(DATA_KEY_IMPORTANCE);
 	}
 
-	public boolean isValid() {
+	@RequiresApi(api = Build.VERSION_CODES.N)
+    public boolean validate() {
+		if (data.containsKey(DATA_KEY_IMPORTANCE) == false) {
+			data.put(DATA_KEY_IMPORTANCE, NotificationManager.IMPORTANCE_DEFAULT);
+		}
+
 		return data.containsKey(DATA_KEY_ID) &&
 				data.containsKey(DATA_KEY_NAME) &&
-				data.containsKey(DATA_KEY_DESCRIPTION) &&
-				data.containsKey(DATA_KEY_IMPORTANCE);
+				data.containsKey(DATA_KEY_DESCRIPTION);
 	}
 
 }
