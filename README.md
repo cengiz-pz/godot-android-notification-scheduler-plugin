@@ -135,6 +135,31 @@ Add a `NotificationScheduler` node to your scene and follow the following steps:
 	- `adb logcat | grep 'godot|somethingElse'` to filter using more than one string at the same time
 - use `#> adb.exe logcat | select-string "godot"` on powershell (Windows)
 
+
+### No small icon found for notification
+For example, there will be an error similar to the following visible in `adb logcat` if small icon resource files have not been added to the project.
+
+```
+ E  FATAL EXCEPTION: main
+ Process: org.godotengine.notification:godot_notification_receiver, PID: 12214
+ java.lang.RuntimeException: Unable to start receiver org.godotengine.plugin.android
+ notification.NotificationReceiver: java.lang.IllegalArgumentException: Invalid notification (no valid small icon)
+```
+
+Also check out:
+https://docs.godotengine.org/en/stable/tutorials/platform/android/android_plugin.html#troubleshooting
+
+
+### Android app settings
+Some Android OS flavors will automatically adjust applications' power consumption settings.  Messages may not be delivered when this setting is set to "optimized" or "restricted," especially if the app is closed.
+
+Check your application's power consumption settings at:
+
+```
+Settings -> Apps -> Your App -> Battery
+```
+
+### Other troubleshooting sources
 Also check out:
 https://docs.godotengine.org/en/stable/tutorials/platform/android/android_plugin.html#troubleshooting
 
