@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.provider.Settings;
@@ -51,6 +52,8 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 	private static final SignalInfo NOTIFICATION_DISMISSED_SIGNAL = new SignalInfo("notification_dismissed", Integer.class);
 
 	private static final int POST_NOTIFICATIONS_PERMISSION_REQUEST_CODE = 11803;
+
+	private static final int NOTIFICATION_NOT_FOUND = -1;
 
 	private Activity activity;
 
@@ -242,6 +245,11 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 				Log.e(LOG_TAG, "onGodotSetupCompleted():: can't check permission status due to null activity");
 			}
 		}
+
+		int notificationId = checkIntent(this.activity.getIntent());
+		if (notificationId != NOTIFICATION_NOT_FOUND) {
+			handleNotificationOpened(notificationId);
+		}
 	}
 
 	@Override
@@ -268,6 +276,31 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 		} else {
 			Log.e(LOG_TAG, "onMainRequestPermissionsResult():: can't check permission result, because SDK version is " + Build.VERSION.SDK_INT);
 		}
+	}
+
+	static int checkIntent(Intent intent) {
+		int notificationId = NOTIFICATION_NOT_FOUND;
+
+		if (intent != null) {
+			Bundle bundle = intent.getExtras();
+			if (bundle != null) {
+				if (bundle.containsKey(NotificationData.DATA_KEY_ID)) {
+					notificationId = bundle.getInt(NotificationData.DATA_KEY_ID, NOTIFICATION_NOT_FOUND);
+					Log.d(LOG_TAG, "checkIntent() received notification id " + notificationId);
+				}
+				else {
+					Log.d(LOG_TAG, "checkIntent() bundle does not contain notification id");
+				}
+			}
+			else {
+				Log.d(LOG_TAG, "checkIntent() bundle is null for intent " + intent);
+			}
+		}
+		else {
+			Log.d(LOG_TAG, "checkIntent() intent is null.");
+		}
+
+		return notificationId;
 	}
 
 	void handleNotificationOpened(int notificationId) {
