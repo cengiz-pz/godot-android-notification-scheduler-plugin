@@ -10,13 +10,15 @@ plugins {
     id("org.jetbrains.kotlin.android") version "2.0.10"
 }
 
-val pluginName = "NotificationSchedulerPlugin"
+val pluginNodeName = "NotificationScheduler"
+val pluginName = pluginNodeName + "Plugin"
 val pluginPackageName = "org.godotengine.plugin.android.notification"
 val resultActivityClassPath = "$pluginPackageName.ResultActivity"
 val notificationReceiverClassPath = "$pluginPackageName.NotificationReceiver"
 val cancelReceiverClassPath = "$pluginPackageName.CancelNotificationReceiver"
 val godotVersion = "4.4.1"
 val pluginVersion = "4.0"
+val targetOs = "android"
 val demoAddOnsDirectory = "../demo/addons"
 val templateDirectory = "addon_template"
 val pluginDependencies = arrayOf(
@@ -101,8 +103,10 @@ val copyAddonsToDemo by tasks.registering(Copy::class) {
     filter(ReplaceTokens::class,
         "tokens" to mapOf(
             "pluginName" to pluginName,
+            "pluginNodeName" to pluginNodeName,
             "pluginVersion" to pluginVersion,
             "pluginPackage" to pluginPackageName,
+            "targetOs" to targetOs,
             "resultClass" to resultActivityClassPath,
             "notificationReceiverClass" to notificationReceiverClassPath,
             "cancelReceiverClass" to cancelReceiverClassPath,
