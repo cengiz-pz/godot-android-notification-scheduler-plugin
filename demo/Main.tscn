@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://bxglp6e2xq2r7"]
 
-[ext_resource type="Script" path="res://Main.gd" id="1_r6ksj"]
+[ext_resource type="Script" uid="uid://bd23rk21snlwn" path="res://Main.gd" id="1_r6ksj"]
 [ext_resource type="Texture2D" uid="uid://bh11dc41dirja" path="res://notification-scheduler.png" id="2_7rmrj"]
-[ext_resource type="Script" path="res://addons/NotificationSchedulerPlugin/NotificationScheduler.gd" id="3_guixi"]
+[ext_resource type="Script" uid="uid://s22elc7p23q0" path="res://addons/NotificationSchedulerPlugin/NotificationScheduler.gd" id="3_guixi"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_r6ksj")
