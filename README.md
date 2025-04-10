@@ -1,3 +1,6 @@
+<p align="center">
+  <img width="256" height="256" src="demo/notification-scheduler.png">
+</p>
 
 ---
 # ![](notification/addon_template/icon.png?raw=true) Notification Scheduler Plugin
