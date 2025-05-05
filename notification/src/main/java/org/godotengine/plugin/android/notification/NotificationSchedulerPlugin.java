@@ -46,6 +46,8 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 
 	static NotificationSchedulerPlugin instance;
 
+	private static final SignalInfo INITIALIZATION_COMPLETED_SIGNAL = new SignalInfo("initialization_completed");
+
 	private static final SignalInfo PERMISSION_GRANTED_SIGNAL = new SignalInfo("permission_granted", String.class);
 	private static final SignalInfo PERMISSION_DENIED_SIGNAL = new SignalInfo("permission_denied", String.class);
 	private static final SignalInfo NOTIFICATION_OPENED_SIGNAL = new SignalInfo("notification_opened", Integer.class);
@@ -59,6 +61,15 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 
 	public NotificationSchedulerPlugin(Godot godot) {
 		super(godot);
+	}
+
+	/**
+	 * Initializes plugin.
+	 */
+	@UsedByGodot
+	public void initialize() {
+		// Nothing to do on Android version (implemented for platform parity)
+		emitSignal(getGodot(), getPluginName(), INITIALIZATION_COMPLETED_SIGNAL);
 	}
 
 	/**
@@ -217,6 +228,7 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 	@Override
 	public Set<SignalInfo> getPluginSignals() {
 		Set<SignalInfo> signals = new ArraySet<>();
+		signals.add(INITIALIZATION_COMPLETED_SIGNAL);
 		signals.add(NOTIFICATION_OPENED_SIGNAL);
 		signals.add(NOTIFICATION_DISMISSED_SIGNAL);
 		signals.add(PERMISSION_GRANTED_SIGNAL);
