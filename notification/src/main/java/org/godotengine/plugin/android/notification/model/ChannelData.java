@@ -17,6 +17,7 @@ public class ChannelData {
 	private static String DATA_KEY_NAME = "name";
 	private static String DATA_KEY_DESCRIPTION = "description";
 	private static String DATA_KEY_IMPORTANCE = "importance";
+	private static String DATA_KEY_BADGE_ENABLED = "badge_enabled";
 
 	private Dictionary data;
 
@@ -40,10 +41,18 @@ public class ChannelData {
 		return (int) data.get(DATA_KEY_IMPORTANCE);
 	}
 
+	public boolean getBadgeEnabled() {
+		return (boolean) data.get(DATA_KEY_BADGE_ENABLED);
+	}
+
 	@RequiresApi(api = Build.VERSION_CODES.N)
     public boolean validate() {
 		if (data.containsKey(DATA_KEY_IMPORTANCE) == false) {
 			data.put(DATA_KEY_IMPORTANCE, NotificationManager.IMPORTANCE_DEFAULT);
+		}
+
+		if (data.containsKey(DATA_KEY_BADGE_ENABLED) == false) {
+			data.put(DATA_KEY_BADGE_ENABLED, true);
 		}
 
 		return data.containsKey(DATA_KEY_ID) &&

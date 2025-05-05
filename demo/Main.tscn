@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bd23rk21snlwn" path="res://Main.gd" id="1_r6ksj"]
 [ext_resource type="Texture2D" uid="uid://bh11dc41dirja" path="res://notification-scheduler.png" id="2_7rmrj"]
-[ext_resource type="Script" uid="uid://s22elc7p23q0" path="res://addons/NotificationSchedulerPlugin/NotificationScheduler.gd" id="3_guixi"]
+[ext_resource type="Script" uid="uid://ynm3ag5xtpdk" path="res://addons/NotificationSchedulerPlugin/NotificationScheduler.gd" id="3_guixi"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_r6ksj")
@@ -81,6 +81,25 @@ tick_count = 10
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 
+[node name="BadgeHBoxContainer" type="HBoxContainer" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/BadgeHBoxContainer"]
+layout_mode = 2
+text = "Badge Count: "
+
+[node name="HSlider" type="HSlider" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/BadgeHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 10.0
+rounded = true
+tick_count = 11
+ticks_on_borders = true
+
+[node name="ValueLabel" type="Label" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/BadgeHBoxContainer"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
 [node name="RestartCheckBox" type="CheckBox" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Upon notification opened, restart app if running"
@@ -103,8 +122,10 @@ script = ExtResource("3_guixi")
 
 [connection signal="value_changed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer/DelayHSlider" to="." method="_on_delay_h_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/IntervalHBoxContainer/IntervalHSlider" to="." method="_on_interval_h_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/BadgeHBoxContainer/HSlider" to="." method="_on_h_slider_value_changed"]
 [connection signal="pressed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/PermissionButton" to="." method="_on_permission_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/SendButton" to="." method="_on_button_pressed"]
+[connection signal="initialization_completed" from="NotificationScheduler" to="." method="_on_notification_scheduler_initialization_completed"]
 [connection signal="notification_dismissed" from="NotificationScheduler" to="." method="_on_notification_scheduler_notification_dismissed"]
 [connection signal="notification_opened" from="NotificationScheduler" to="." method="_on_notification_scheduler_notification_opened"]
 [connection signal="permission_denied" from="NotificationScheduler" to="." method="_on_notification_scheduler_permission_denied"]

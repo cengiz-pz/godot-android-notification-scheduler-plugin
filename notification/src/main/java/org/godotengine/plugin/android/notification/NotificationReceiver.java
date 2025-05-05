@@ -42,6 +42,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 			String title = intent.getStringExtra(NotificationData.DATA_KEY_TITLE);
 			String content = intent.getStringExtra(NotificationData.DATA_KEY_CONTENT);
 			String smallIconName = intent.getStringExtra(NotificationData.DATA_KEY_SMALL_ICON_NAME);
+			int badgeCount = intent.getIntExtra(NotificationData.DATA_KEY_BADGE_COUNT, 0);
 
 			Intent notificationActionIntent = new Intent(context, ResultActivity.class);
 			notificationActionIntent.putExtra(NotificationData.DATA_KEY_ID, notificationId);
@@ -82,6 +83,10 @@ public class NotificationReceiver extends BroadcastReceiver {
 						.setContentIntent(pendingIntent)
 						.setDeleteIntent(onDismissPendingIntent)
 						.setAutoCancel(true);
+
+				if (intent.hasExtra(NotificationData.DATA_KEY_BADGE_COUNT)) {
+					notificationBuilder.setNumber(badgeCount);
+				}
 
 				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
 						ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
