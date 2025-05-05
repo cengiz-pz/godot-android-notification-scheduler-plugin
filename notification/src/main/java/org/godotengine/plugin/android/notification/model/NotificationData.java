@@ -19,6 +19,7 @@ public class NotificationData {
 	public static String DATA_KEY_DELAY = "delay";
 	public static String DATA_KEY_DEEPLINK = "deeplink";
 	public static String DATA_KEY_INTERVAL = "interval";
+	public static String DATA_KEY_BADGE_COUNT= "badge_count";
 	public static String OPTION_KEY_RESTART_APP = "restart_app";
 
 	private Dictionary data;
@@ -105,6 +106,10 @@ public class NotificationData {
 	 */
 	public Integer getInterval() {
 		return (Integer) data.get(DATA_KEY_INTERVAL);
+	}
+
+	public Integer getBadgeCount() {
+		return (data.containsKey(DATA_KEY_BADGE_COUNT)) ? (Integer) data.get(DATA_KEY_BADGE_COUNT) : (Integer) 0;
 	}
 
 	/**

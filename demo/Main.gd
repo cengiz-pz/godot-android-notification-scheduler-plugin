@@ -25,6 +25,8 @@ const NOTIFICATION_ICON_NAME: String = "ic_demo_notification"
 @onready var _interval_value_label: Label = $CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/IntervalHBoxContainer/ValueLabel as Label
 @onready var _permission_button: Button = $CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/PermissionButton as Button
 @onready var _restart_checkbox: CheckBox = $CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/RestartCheckBox as CheckBox
+@onready var _badge_count_slider: HSlider = $CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/BadgeHBoxContainer/HSlider as HSlider
+@onready var _badge_count_value_label: Label = $CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/BadgeHBoxContainer/ValueLabel as Label
 
 var _notification_id: int = 0
 
@@ -32,8 +34,16 @@ var _notification_id: int = 0
 func _ready() -> void:
 	_delay_value_label.text = str(int(_delay_slider.value))
 	_interval_value_label.text = str(int(_interval_slider.value))
+	_badge_count_value_label.text = str(int(_badge_count_slider.value))
+
+	notification_scheduler.initialize()
+
+
+func _on_notification_scheduler_initialization_completed() -> void:
+	_print_to_screen("Initialization completed!")
 
 	if notification_scheduler.has_post_notifications_permission():
+		_print_to_screen("Creating notification channel.")
 		notification_scheduler.create_notification_channel(
 			NotificationChannel.new()
 					.set_id(channel_id)
@@ -45,7 +55,6 @@ func _ready() -> void:
 		_print_to_screen("App does not have required notification permissions!")
 
 
-
 func _on_button_pressed() -> void:
 	var __notification_data = NotificationData.new()\
 			.set_id(_get_next_notification_id())\
@@ -53,7 +62,8 @@ func _on_button_pressed() -> void:
 			.set_title(notification_title)\
 			.set_content(notification_text)\
 			.set_small_icon_name(NOTIFICATION_ICON_NAME)\
-			.set_delay(_delay_slider.value)
+			.set_delay(_delay_slider.value)\
+			.set_badge_count(roundi(_badge_count_slider.value))
 
 	if _interval_checkbox.button_pressed:
 		__notification_data.set_interval(_interval_slider.value)
@@ -113,3 +123,7 @@ func _on_notification_scheduler_notification_opened(notification_id: int) -> voi
 
 func _on_notification_scheduler_notification_dismissed(notification_id: int) -> void:
 	_print_to_screen("Notification %d dismissed" % notification_id)
+
+
+func _on_h_slider_value_changed(value: float) -> void:
+	_badge_count_value_label.text = str(int(value))

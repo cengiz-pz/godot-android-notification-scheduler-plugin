@@ -86,6 +86,7 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 			NotificationChannel channel = new NotificationChannel(channelData.getId(), channelData.getName(),
 					channelData.getImportance());
 			channel.setDescription(channelData.getDescription());
+			channel.setShowBadge(channelData.getBadgeEnabled());
 			NotificationManager manager = (NotificationManager) activity.getSystemService(NOTIFICATION_SERVICE);
 			manager.createNotificationChannel(channel);
 			Log.d(LOG_TAG, String.format("%s():: channel id: %s, name: %s, description: %s",
@@ -105,6 +106,7 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 	@UsedByGodot
 	public void schedule(Dictionary data) {
 		NotificationData notificationData = new NotificationData(data);
+		Log.d(LOG_TAG, "schedule():: notification id: " + notificationData.getId());
 		if (notificationData.isValid()) {
 			@SuppressWarnings("ConstantConditions") int notificationId = notificationData.getId();
 
@@ -121,6 +123,10 @@ public class NotificationSchedulerPlugin extends GodotPlugin {
 
 			if (notificationData.hasRestartAppOption()) {
 				intent.putExtra(NotificationData.OPTION_KEY_RESTART_APP, true);
+			}
+
+			if (notificationData.getBadgeCount() > 0) {
+				intent.putExtra(NotificationData.DATA_KEY_BADGE_COUNT, notificationData.getBadgeCount());
 			}
 
 			if (notificationData.hasInterval()) {
