@@ -1,2 +1,11 @@
 # disable blank issue creation
 blank_issues_enabled: false
+
+contact_links:
+  - name: Bugs
+    url: https://github.com/godot-sdk-integrations/godot-notification-scheduler/issues
+    about: Please report bugs at the new repository.
+
+  - name: Feature Requests
+    url: https://github.com/godot-sdk-integrations/godot-notification-scheduler/issues
+    about: Please submit feature requests at the new repository.
